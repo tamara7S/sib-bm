@@ -1,0 +1,20 @@
+=========================================================
+PANDUAN VIDEO DRONE LATAR BELAKANG SIB-BM
+=========================================================
+
+Folder 'videos' ini digunakan untuk menyimpan video drone rekaman kawasan Pondok Pesantren Bahrul Maghfiroh.
+
+1. NAMA FILE VIDEO DRONE:
+   - Simpan video drone dengan nama:
+     drone-kawasan.mp4
+   - Web SIB-BM akan otomatis memutar video ini sebagai latar belakang peta interaktif utama.
+
+2. TIPS FORMAT & UKURAN:
+   - Format: .mp4 (Codec H.264).
+   - Resolusi yang disarankan: 1080p (Full HD) atau 720p.
+   - Durasi: Cukup 15 - 45 detik (akan berulang otomatis / loop).
+   - Ukuran file: Di bawah 15 MB agar loading web tetap sangat cepat dan lancar dibuka dari HP maupun laptop.
+
+3. MENGGANTI VIDEO LEWAT DASHBOARD PEMILIK:
+   - Pemilik pondok juga bisa mengganti video kapan saja melalui menu 'Dashboard Pemilik' di web!
+=========================================================

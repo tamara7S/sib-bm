@@ -4,12 +4,33 @@
 let filterAktif = "Semua";
 let keywordCari = "";
 
+// Ambil data gedung terbaru (jika sudah diubah oleh pemilik di Dashboard Pemilik)
+if (typeof DATA_GEDUNG !== "undefined" && localStorage.getItem("sib_bm_gedung")) {
+  try {
+    const customData = JSON.parse(localStorage.getItem("sib_bm_gedung"));
+    if (Array.isArray(customData) && customData.length > 0) {
+      DATA_GEDUNG = customData;
+    }
+  } catch (e) {
+    console.warn("Gagal memuat data custom:", e);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  inisialisasiMediaDrone();
   inisialisasiTimKKN();
   renderPetaPins();
   renderGridGedung();
   inisialisasiEvent();
 });
+
+function inisialisasiMediaDrone() {
+  const customVideo = localStorage.getItem("sib_bm_drone_video");
+  const videoEl = document.getElementById("bg-drone-video");
+  if (customVideo && videoEl) {
+    videoEl.src = customVideo;
+  }
+}
 
 // 1. Inisialisasi Identitas Tim KKN Universitas Negeri Malang
 function inisialisasiTimKKN() {
@@ -187,23 +208,10 @@ function renderGridGedung() {
             </div>
           </div>
 
-          <!-- Fasilitas Mini Preview -->
-          <div class="text-xs text-slate-500">
-            <span class="font-semibold text-slate-700">Fasilitas Utama:</span>
-            <div class="mt-1.5 flex flex-wrap gap-1">
-              ${gedung.fasilitas_utama.slice(0, 3).map(f => `
-                <span class="px-2 py-0.5 rounded bg-slate-100 text-[11px] text-slate-600">✓ ${f}</span>
-              `).join("")}
-              ${gedung.fasilitas_utama.length > 3 ? `
-                <span class="px-2 py-0.5 rounded bg-emerald-50 text-[11px] text-emerald-700 font-semibold">+${gedung.fasilitas_utama.length - 3} lainnya</span>
-              ` : ""}
-            </div>
-          </div>
-
           <!-- Tombol Detail -->
           <button onclick="bukaDetailGedung('${gedung.id}')" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-emerald-600 text-slate-800 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-2 group-hover:bg-emerald-600 group-hover:text-white">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Buka Fasilitas & Ukuran Lengkap</span>
+            <span>Buka Rincian Ukuran Gedung</span>
           </button>
         </div>
 
@@ -212,7 +220,7 @@ function renderGridGedung() {
   }).join("");
 }
 
-// 4. Modal Detail Gedung Sesuai Permintaan (Luas Tanah, Luas Gedung, Fasilitas, Kapasitas)
+// 4. Modal Detail Gedung (Luas Tanah, Luas Bangunan, Kapasitas, Lantai, Foto)
 function bukaDetailGedung(idGedung) {
   const gedung = DATA_GEDUNG.find(g => g.id === idGedung);
   if (!gedung) return;
@@ -232,34 +240,6 @@ function bukaDetailGedung(idGedung) {
   document.getElementById("modal-lantai").innerText = `${gedung.jumlah_lantai} Lantai`;
   document.getElementById("modal-status").innerText = gedung.status;
   document.getElementById("modal-pj").innerText = gedung.kontak_pj;
-
-  // Render Pembagian Lantai
-  const lantaiContainer = document.getElementById("modal-pembagian-lantai");
-  if (gedung.pembagian_lantai && gedung.pembagian_lantai.length > 0) {
-    lantaiContainer.innerHTML = gedung.pembagian_lantai.map(item => `
-      <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-start gap-3">
-        <span class="px-2 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-xs whitespace-nowrap">
-          ${item.lantai}
-        </span>
-        <span class="text-xs text-slate-700 leading-relaxed mt-0.5">
-          ${item.fungsi}
-        </span>
-      </div>
-    `).join("");
-  } else {
-    lantaiContainer.innerHTML = `<p class="text-xs text-slate-400">Data pembagian lantai belum tersedia.</p>`;
-  }
-
-  // Render Checklist Fasilitas
-  const fasContainer = document.getElementById("modal-fasilitas-list");
-  if (gedung.fasilitas_utama && gedung.fasilitas_utama.length > 0) {
-    fasContainer.innerHTML = gedung.fasilitas_utama.map(fas => `
-      <div class="flex items-center gap-2 p-2 rounded-lg bg-emerald-50/60 border border-emerald-100 text-slate-700">
-        <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
-        <span>${fas}</span>
-      </div>
-    `).join("");
-  }
 
   // Buka Modal dengan Animasi
   modal.classList.remove("hidden");
