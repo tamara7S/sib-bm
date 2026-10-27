@@ -57,12 +57,6 @@
           <i class="fa-solid fa-right-to-bracket text-xs"></i>
           <span>Masuk ke Panel Pengelola</span>
         </button>
-
-        <div class="pt-2 text-center">
-          <a href="{{ route('beranda') }}" class="text-xs text-slate-500 hover:text-emerald-600 font-semibold transition-colors">
-            <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Halaman Utama
-          </a>
-        </div>
       </form>
 
     </div>
