@@ -29,18 +29,21 @@
           },
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            display: ['"Outfit"', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'sans-serif'],
           }
         }
       }
     }
   </script>
 
-  <!-- Google Fonts & Font Awesome -->
+  <!-- Google Fonts: Plus Jakarta Sans & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Leaflet CSS for Google/Satellite Real Interactive Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
     /* Styling Peta Drone & Pin Interaktif */
@@ -54,6 +57,35 @@
     /* Efek Berkedip Halus Pin Gedung */
     .pin-pulse {
       animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Leaflet Map & Popup Styling */
+    #map-leaflet {
+      width: 100%;
+      background: #0f172a;
+    }
+    .leaflet-popup-content-wrapper {
+      background: #0f172a !important;
+      color: #fff !important;
+      border-radius: 16px !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+    .leaflet-popup-content {
+      margin: 0 !important;
+      line-height: 1.4 !important;
+    }
+    .leaflet-popup-tip {
+      background: #0f172a !important;
+    }
+    .leaflet-container {
+      font-family: inherit !important;
+    }
+    .leaflet-marker-icon.custom-pin-marker {
+      background: transparent;
+      border: none;
     }
 
     @keyframes pulse-ring {
@@ -98,14 +130,14 @@
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
       <div class="flex items-center gap-2">
         <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-          <i class="fa-solid fa-graduation-cap mr-1"></i> Proyek KKN Terpadu
+          <i class="fa-solid fa-graduation-cap mr-1"></i> KKN Reguler
         </span>
         <span class="text-slate-300 font-medium">Universitas Negeri Malang (UM) • Ponpes Bahrul Maghfiroh</span>
       </div>
       <div class="flex items-center gap-4 text-slate-400">
-        <span><i class="fa-solid fa-location-dot text-emerald-400 mr-1"></i> Joyo Agung No. 2, Lowokwaru, Malang</span>
+        <span><i class="fa-solid fa-location-dot text-emerald-400 mr-1"></i> Jl. Joyo Agung Atas no. 02., Kota Malang, Provinsi Jawa Timur</span>
         <span class="hidden sm:inline">•</span>
-        <span class="hidden sm:inline"><i class="fa-regular fa-calendar-check text-emerald-400 mr-1"></i> Periode 2026</span>
+        <span class="hidden sm:inline"><i class="fa-regular fa-calendar-check text-emerald-400 mr-1"></i> Periode <span class="dinamis-tahun font-semibold text-emerald-300">2026</span></span>
       </div>
     </div>
   </div>
@@ -115,15 +147,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-20">
         
-        <!-- Brand / Logo -->
+        <!-- Brand / Logo Resmi Bahrul Maghfiroh -->
         <a href="#beranda" class="flex items-center gap-3 group">
-          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-700 to-emerald-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-            <i class="fa-solid fa-mosque text-2xl"></i>
-          </div>
+          <img src="images/logo_bm.png" alt="Logo Ponpes Bahrul Maghfiroh" class="w-12 h-12 object-contain bg-white rounded-xl p-1 shadow-md shadow-emerald-500/10 group-hover:scale-105 transition-transform border border-slate-100">
           <div>
             <div class="flex items-center gap-1.5">
-              <span class="font-display font-extrabold text-2xl tracking-tight text-slate-900">SIB<span class="text-emerald-600">-BM</span></span>
-              <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">v1.0</span>
+              <span class="font-display font-bold text-2xl tracking-tight text-slate-900">SIB<span class="text-emerald-600">-BM</span></span>
             </div>
             <p class="text-xs text-slate-500 font-medium">Sistem Informasi Bangunan Bahrul Maghfiroh</p>
           </div>
@@ -136,20 +165,16 @@
             <i class="fa-solid fa-map-location-dot text-emerald-600"></i> Peta Interaktif
           </a>
           <a href="#direktori-gedung" class="text-sm font-semibold text-slate-700 hover:text-emerald-600 transition-colors">Direktori Gedung</a>
-          <a href="#profil-ponpes" class="text-sm font-semibold text-slate-700 hover:text-emerald-600 transition-colors">Tentang Ponpes</a>
           <a href="#tim-kkn" class="text-sm font-semibold text-slate-700 hover:text-emerald-600 transition-colors flex items-center gap-1">
             <i class="fa-solid fa-users text-amber-500"></i> Tim KKN UM
           </a>
-          <a href="admin.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-emerald-950 text-amber-400 font-bold text-xs border border-amber-500/40 shadow-sm transition-all hover:scale-105">
-            <i class="fa-solid fa-shield-halved text-amber-400"></i> Dashboard Pemilik
-          </a>
         </div>
 
-        <!-- CTA Button -->
+        <!-- CTA Button: Kontak Pesantren -->
         <div class="flex items-center gap-3">
-          <a href="#peta-kawasan" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md shadow-emerald-600/20 transition-all hover:shadow-lg hover:-translate-y-0.5">
-            <i class="fa-solid fa-compass animate-spin text-xs" style="animation-duration: 8s;"></i>
-            <span>Buka Peta Drone</span>
+          <a href="https://wa.me/628113648800" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm shadow-emerald-600/20 transition-all hover:scale-[1.02]">
+            <i class="fa-brands fa-whatsapp text-sm"></i>
+            <span>Kontak Ponpes</span>
           </a>
         </div>
 
@@ -158,107 +183,95 @@
   </nav>
 
   <!-- ================= HERO SECTION ================= -->
-  <section id="beranda" class="relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white pt-16 pb-24 lg:pt-20 lg:pb-32">
-    <!-- Background Motif / Pattern -->
-    <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:24px_24px]"></div>
+  <section id="beranda" class="relative overflow-hidden bg-slate-950 text-white pt-10 pb-12 lg:pt-14 lg:pb-16">
+    <!-- Cinematic Drone Video Background Latar Penuh (Non-Interaktif) -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <video id="hero-bg-drone-video" autoplay loop muted playsinline class="w-full h-full object-cover opacity-25" poster="images/drone-kawasan.jpg">
+        <source src="videos/drone-kawasan.mp4" type="video/mp4">
+        <source src="images/drone-kawasan.mp4" type="video/mp4">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-and-buildings-42934-large.mp4" type="video/mp4">
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/90 to-slate-950"></div>
+    </div>
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         
-        <!-- Left Column: Copywriting & Identitas KKN UM -->
-        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+        <!-- Left Column: Copywriting & Identitas KKN UM (Lebih Rapi & Tenang) -->
+        <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
           
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold backdrop-blur-sm">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            Karya Pengabdian Mahasiswa KKN Universitas Negeri Malang
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-medium backdrop-blur-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>KKN Reguler Universitas Negeri Malang • S1 Teknik Informatika</span>
           </div>
 
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight leading-tight">
-            Eksplorasi Tata Letak & Fasilitas <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300">Gedung Pesantren</span>
+          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white leading-snug">
+            Sistem Informasi Bangunan & Tata Letak<br>
+            <span class="text-emerald-400">Pondok Pesantren Bahrul Maghfiroh</span>
           </h1>
 
-          <p class="text-base sm:text-lg text-slate-300 max-w-2xl font-normal leading-relaxed">
-            Platform peta digital interaktif <strong>SIB-BM</strong> untuk mengenalkan sarana prasarana, ukuran luas tanah, luas bangunan, daya tampung, serta fasilitas tiap gedung di <strong>Pondok Pesantren Bahrul Maghfiroh</strong> secara cepat, mudah, dan transparan.
+          <p class="text-xs sm:text-sm text-slate-300 max-w-xl font-normal leading-relaxed">
+            Platform peta digital interaktif untuk eksplorasi sarana prasarana, estimasi luas tanah, luas bangunan, serta daya tampung santri berbasis citra satelit dan data survei lapangan.
           </p>
 
-          <!-- Action Buttons -->
-          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-            <a href="#peta-kawasan" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold shadow-lg shadow-emerald-500/30 transition-all hover:scale-[1.02] flex items-center gap-2">
+          <!-- Action Buttons (Ringkas & Proporsional) -->
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
+            <a href="#peta-kawasan" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.02] flex items-center gap-2">
               <i class="fa-solid fa-map-location-dot"></i>
-              <span>Jelajahi Peta Kawasan</span>
+              <span>Buka Peta Interaktif</span>
             </a>
-            <a href="#direktori-gedung" class="px-6 py-3.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 font-semibold transition-all hover:text-white flex items-center gap-2">
+            <a href="#direktori-gedung" class="px-5 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 font-semibold text-xs transition-all hover:text-white flex items-center gap-2">
               <i class="fa-solid fa-table-cells-large"></i>
               <span>Daftar Rincian Gedung</span>
             </a>
           </div>
 
-          <!-- Feature Highlights / Badges -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-800">
-            <div class="p-3 rounded-lg bg-slate-800/40 border border-slate-700/50">
-              <div class="text-2xl font-bold font-display text-emerald-400" id="stat-total-gedung">7+</div>
-              <div class="text-xs text-slate-400 mt-0.5">Bangunan Terdata</div>
+          <!-- Feature Highlights / Badges Ringkas -->
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4 border-t border-slate-800/80 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold text-emerald-400" id="stat-total-gedung">7</span>
+              <span class="text-slate-400">Bangunan Terdata</span>
             </div>
-            <div class="p-3 rounded-lg bg-slate-800/40 border border-slate-700/50">
-              <div class="text-2xl font-bold font-display text-amber-400">100%</div>
-              <div class="text-xs text-slate-400 mt-0.5">Rincian Fasilitas</div>
-            </div>
-            <div class="p-3 rounded-lg bg-slate-800/40 border border-slate-700/50">
-              <div class="text-2xl font-bold font-display text-teal-400">± 4.500+</div>
-              <div class="text-xs text-slate-400 mt-0.5">Total Kapasitas</div>
-            </div>
-            <div class="p-3 rounded-lg bg-slate-800/40 border border-slate-700/50">
-              <div class="text-2xl font-bold font-display text-blue-400">Drone View</div>
-              <div class="text-xs text-slate-400 mt-0.5">Visual Kawasan</div>
+            <span class="text-slate-700 hidden sm:inline">•</span>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold text-amber-400" id="stat-total-tanah">± 35.000 m²</span>
+              <span class="text-slate-400">Total Luas Tanah Kawasan</span>
             </div>
           </div>
 
         </div>
 
-        <!-- Right Column: Visual Card Preview -->
+        <!-- Right Column: Video Drone Showcase Frame (Sleek & Bersih Tanpa Tombol Dobel) -->
         <div class="lg:col-span-5 relative">
-          <div class="relative mx-auto max-w-md rounded-2xl p-2 bg-gradient-to-tr from-emerald-500/30 via-slate-700 to-amber-500/20 shadow-2xl backdrop-blur-md">
-            <div class="rounded-xl overflow-hidden bg-slate-900 border border-slate-800 p-4 space-y-4">
+          <div class="relative mx-auto max-w-md rounded-2xl p-1.5 bg-gradient-to-tr from-emerald-500/20 via-slate-800 to-slate-700/50 shadow-2xl backdrop-blur-md">
+            <div class="rounded-xl overflow-hidden bg-slate-900 border border-slate-800/80 p-3 space-y-3">
               
-              <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div class="flex items-center gap-2">
-                  <div class="w-3 h-3 rounded-full bg-rose-500"></div>
-                  <div class="w-3 h-3 rounded-full bg-amber-500"></div>
-                  <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
-                  <span class="text-xs font-mono text-slate-400 ml-2">preview-sib-bm.app</span>
+              <!-- Video Header -->
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div class="flex items-center gap-2 text-xs text-slate-300 font-medium">
+                  <i class="fa-solid fa-video text-emerald-400 text-xs"></i>
+                  <span>Tayangan Udara Kawasan</span>
                 </div>
-                <span class="text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800">Interaktif</span>
-              </div>
-
-              <!-- Mini visual mock -->
-              <div class="relative h-64 rounded-lg overflow-hidden bg-emerald-950/40 border border-emerald-900/40 flex items-center justify-center group cursor-pointer" onclick="scrollToMap()">
-                <!-- Background visual -->
-                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80" alt="Preview Ponpes" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
-                
-                <!-- Floating Pin simulation -->
-                <div class="absolute top-1/3 left-1/2 -translate-x-1/2 text-center">
-                  <div class="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/50 animate-bounce">
-                    <i class="fa-solid fa-location-dot text-xl"></i>
-                  </div>
-                  <span class="inline-block mt-2 px-3 py-1 bg-slate-900/90 text-white text-xs font-bold rounded-full border border-emerald-500/40 backdrop-blur-md">
-                    Klik Gedung untuk Detail
-                  </span>
-                </div>
-
-                <div class="absolute bottom-3 left-3 right-3 text-left bg-slate-900/90 p-3 rounded-lg border border-slate-800 backdrop-blur-md">
-                  <div class="text-xs font-bold text-white">Contoh Info: Gedung A / Masjid Utama</div>
-                  <div class="text-[11px] text-slate-400 mt-0.5 flex justify-between">
-                    <span>Luas: 1.200 m²</span>
-                    <span>Kapasitas: 2.000 Jamaah</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="text-center pt-1">
-                <button onclick="scrollToMap()" class="w-full py-2.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 text-xs font-semibold transition-colors">
-                  <i class="fa-solid fa-arrow-down mr-1"></i> Buka Tampilan Peta Lengkap Di Bawah
+                <button onclick="perbesarVideo()" class="text-emerald-400 hover:text-emerald-300 text-[11px] font-semibold flex items-center gap-1 transition-colors" title="Perbesar Tampilan Video">
+                  <i class="fa-solid fa-expand text-[10px]"></i>
+                  <span>Perbesar</span>
                 </button>
+              </div>
+
+              <!-- Pemutar Video Drone Khusus -->
+              <div class="relative h-60 sm:h-64 rounded-lg overflow-hidden bg-slate-950 border border-slate-800 shadow-inner group">
+                <video id="hero-drone-player" autoplay loop muted playsinline class="w-full h-full object-cover cursor-pointer" onclick="perbesarVideo()" poster="images/drone-kawasan.jpg">
+                  <source src="videos/drone-kawasan.mp4" type="video/mp4">
+                  <source src="images/drone-kawasan.mp4" type="video/mp4">
+                  <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-and-buildings-42934-large.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none"></div>
+
+                <!-- Label Lokasi Halus di Bawah Video -->
+                <div class="absolute bottom-2.5 left-3 right-3 text-left bg-slate-900/90 py-1.5 px-3 rounded-lg border border-slate-800 backdrop-blur-md flex items-center justify-between">
+                  <span class="text-[11px] font-semibold text-white">Ponpes Bahrul Maghfiroh</span>
+                  <span class="text-[10px] text-emerald-400 font-mono">1080p HD</span>
+                </div>
               </div>
 
             </div>
@@ -267,27 +280,30 @@
 
       </div>
     </div>
+
+      </div>
+    </div>
   </section>
 
   <!-- ================= SECTION: PETA INTERAKTIF KAWASAN ================= -->
-  <section id="peta-kawasan" class="py-16 lg:py-20 bg-slate-100 border-y border-slate-200">
+  <section id="peta-kawasan" class="py-10 lg:py-14 bg-slate-100 border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Section Header -->
-      <div class="text-center max-w-3xl mx-auto mb-10">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-3">
+      <div class="text-center max-w-3xl mx-auto mb-6">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-2">
           <i class="fa-solid fa-crosshairs"></i> Modul Utama SIB-BM
         </div>
-        <h2 class="text-3xl sm:text-4xl font-display font-extrabold text-slate-900">
+        <h2 class="text-2xl sm:text-3xl font-display font-extrabold text-slate-900">
           Peta Drone & Denah Kawasan Pesantren
         </h2>
-        <p class="text-slate-600 mt-3 text-sm sm:text-base">
-          Arahkan kursor atau sentuh <strong>Pin Gedung</strong> di bawah untuk membuka informasi detail fasilitas, daya tampung, serta luas tanah & luas bangunan secara lengkap.
+        <p class="text-slate-600 mt-2 text-xs sm:text-sm">
+          Arahkan kursor atau sentuh <strong>Pin Gedung</strong> di bawah untuk membuka informasi detail ukuran luas tanah, luas bangunan, daya tampung, serta foto gedung.
         </p>
       </div>
 
       <!-- Toolbar: Filter Kategori & Search Bar -->
-      <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200/80 mb-4 flex flex-col md:flex-row justify-between items-center gap-3">
         
         <!-- Filter Pills -->
         <div class="flex flex-wrap items-center gap-2 w-full md:w-auto" id="filter-container">
@@ -313,61 +329,46 @@
 
         <!-- Search Bar -->
         <div class="relative w-full md:w-72">
-          <input type="text" id="input-cari" oninput="cariGedung(this.value)" placeholder="Cari nama gedung atau fasilitas..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none focus:bg-white transition-all">
+          <input type="text" id="input-cari" oninput="cariGedung(this.value)" placeholder="Cari nama gedung..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none focus:bg-white transition-all">
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
         </div>
 
       </div>
 
-      <!-- MAP CONTAINER VIEWPORT -->
+      <!-- MAP CONTAINER VIEWPORT (Peta Satelit Interaktif HD Berbasis Koordinat Nyata) -->
       <div class="relative bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
         
-        <!-- Map Canvas Visual (Drone Aerial Simulator) -->
-        <div id="map-viewport" class="map-container w-full h-[540px] sm:h-[620px] relative transition-transform duration-300">
-          
-          <!-- Aerial Master Drone Video / Imagery Layer -->
-          <div class="absolute inset-0 overflow-hidden">
-            <!-- Drone Video Background (Membaca file video drone lokal atau fallback dinamis) -->
-            <video id="bg-drone-video" autoplay loop muted playsinline class="w-full h-full object-cover opacity-80" poster="images/drone-kawasan.jpg" style="filter: contrast(1.05) brightness(0.88);">
-              <source src="videos/drone-kawasan.mp4" type="video/mp4">
-              <source src="images/drone-kawasan.mp4" type="video/mp4">
-              <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-and-buildings-42934-large.mp4" type="video/mp4">
-            </video>
-            <!-- Overlay visual background image fallback jika video tidak aktif -->
-            <div id="bg-drone-fallback" class="absolute inset-0 bg-cover bg-center pointer-events-none opacity-40 mix-blend-overlay" style="background-image: url('images/drone-kawasan.jpg');"></div>
-          </div>
-          
-          <!-- Grid Overlay / Efek Denah Arsitektural -->
-          <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+        <!-- Peta Satelit Leaflet -->
+        <div id="map-leaflet" class="w-full h-[500px] sm:h-[560px] lg:h-[600px] z-10"></div>
 
-          <!-- Compass & Skala -->
-          <div class="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700 text-white flex items-center gap-3 shadow-lg z-20">
-            <div class="w-7 h-7 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-xs">
-              U
-            </div>
-            <div class="text-[11px] text-slate-300 leading-tight">
-              <span class="font-bold text-white">Kompas Utara</span><br>
-              Area Ponpes Bahrul Maghfiroh
-            </div>
+        <!-- Tombol Aksi Peta Cepat di Pojok Kanan Atas (Ganti Mode Satelit / Jalan, Reset Kamera) -->
+        <div class="absolute top-4 right-4 z-20 flex flex-col gap-2">
+          <div class="bg-slate-900/90 backdrop-blur-md p-1.5 rounded-2xl border border-slate-700 shadow-xl flex items-center gap-1.5">
+            <button onclick="ubahTampilanPeta('hybrid')" id="btn-mode-hybrid" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow transition-all flex items-center gap-1.5" title="Tampilan Satelit Nyata Google + Label Jalan">
+              <i class="fa-solid fa-satellite"></i> Satelit HD
+            </button>
+            <button onclick="ubahTampilanPeta('streets')" id="btn-mode-streets" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5" title="Tampilan Peta Jalan">
+              <i class="fa-solid fa-map"></i> Peta Jalan
+            </button>
           </div>
 
-          <!-- Pintu Gerbang Utama / Penanda Akses Masuk -->
-          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-amber-500/90 text-slate-950 px-4 py-1.5 rounded-full text-xs font-bold shadow-xl border border-amber-300 flex items-center gap-2 z-20">
-            <i class="fa-solid fa-door-open"></i> PINTU GERBANG UTAMA (AKSES MASUK DARI JALAN JOYO AGUNG)
-          </div>
+          <button onclick="resetPosisiPeta()" class="bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-slate-700 text-white text-xs font-bold shadow-xl transition-all flex items-center justify-center gap-2 hover:border-emerald-500 hover:text-emerald-400" title="Kembalikan Tampilan Peta ke Titik Tengah Ponpes">
+            <i class="fa-solid fa-arrows-to-dot text-emerald-400"></i>
+            <span>Pusatkan Ponpes</span>
+          </button>
+        </div>
 
-          <!-- TEMPAT GENERATE PIN GEDUNG DINAMIS DARI DATA-GEDUNG.JS -->
-          <div id="pins-layer" class="absolute inset-0 z-10">
-            <!-- Pin akan dimasukkan oleh script JavaScript -->
-          </div>
-
+        <!-- Pintu Gerbang Utama / Penanda Akses Masuk Overlay -->
+        <div class="absolute bottom-14 left-4 z-20 bg-slate-950/90 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-xl border border-slate-800 backdrop-blur-md flex items-center gap-2 pointer-events-none">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Jl. Joyo Agung Atas no. 02., Kota Malang, Provinsi Jawa Timur</span>
         </div>
 
         <!-- Map Footer Bar: Legend Keterangan Warna Pin -->
-        <div class="bg-slate-950 text-white px-6 py-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="bg-slate-950 text-white px-6 py-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs relative z-20">
           <div class="flex items-center gap-2">
             <span class="text-slate-400 font-medium">Petunjuk:</span>
-            <span class="text-slate-300">Klik ikon pin pada gambar di atas untuk membuka pop-up ukuran dan fasilitas gedung.</span>
+            <span class="text-slate-300">Gunakan scroll mouse atau tombol (+ / -) untuk zoom in/out. Klik marker pin gedung untuk melihat ukuran & rincian.</span>
           </div>
           <div class="flex items-center gap-4 text-[11px]">
             <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Ibadah</span>
@@ -384,102 +385,50 @@
   </section>
 
   <!-- ================= SECTION: DIREKTORI & DAFTAR GEDUNG (CARDS) ================= -->
-  <section id="direktori-gedung" class="py-16 lg:py-24 bg-white">
+  <section id="direktori-gedung" class="py-12 lg:py-14 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-7">
         <div>
           <span class="text-emerald-600 font-bold text-xs uppercase tracking-wider">Katalog Lengkap</span>
-          <h2 class="text-3xl font-display font-extrabold text-slate-900 mt-1">Direktori Bangunan & Sarana Prasarana</h2>
-          <p class="text-slate-500 text-sm mt-2 max-w-2xl">
-            Rangkuman seluruh gedung yang telah disurvei dan diinventarisasi oleh tim KKN Universitas Negeri Malang di Pondok Pesantren Bahrul Maghfiroh.
+          <h2 class="text-2xl sm:text-3xl font-display font-extrabold text-slate-900 mt-1">Direktori Bangunan & Sarana Prasarana</h2>
+          <p class="text-slate-500 text-xs sm:text-sm mt-1.5 max-w-2xl">
+            Rangkuman seluruh gedung yang telah disurvei dan diinventarisasi oleh tim KKN Reguler Universitas Negeri Malang di Pondok Pesantren Bahrul Maghfiroh.
           </p>
         </div>
-        <div class="mt-4 md:mt-0 text-sm font-semibold text-slate-500">
+        <div class="mt-4 md:mt-0 text-xs font-semibold text-slate-500">
           Menampilkan <span id="count-gedung" class="text-emerald-600 font-bold">0</span> Bangunan
         </div>
       </div>
 
       <!-- Grid Kartu Gedung -->
-      <div id="grid-gedung" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div id="grid-gedung" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Disuntikkan secara dinamis dari data-gedung.js -->
       </div>
 
     </div>
   </section>
 
-  <!-- ================= SECTION: TENTANG PONPES BAHRUL MAGHFIROH ================= -->
-  <section id="profil-ponpes" class="py-16 bg-slate-900 text-white relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
-        <div class="lg:col-span-6 space-y-5">
-          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/30">
-            Profil Singkat
-          </span>
-          <h2 class="text-3xl sm:text-4xl font-display font-extrabold text-white">
-            Pondok Pesantren Bahrul Maghfiroh
-          </h2>
-          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Didirikan oleh almarhum <strong>KH. Lukman Al-Karim (Gus Lukman)</strong>, Pondok Pesantren Bahrul Maghfiroh terletak di kawasan strategis Kota Malang (Jl. Joyo Agung, Tlogomas/Merjosari). Pesantren ini memadukan pendidikan formal unggulan (SMP, SMA, Madrasah) dengan penanaman nilai-nilai salafiyah, tahfidz Al-Qur'an, dan pembentukan karakter kepemimpinan santri.
-          </p>
-          <div class="grid grid-cols-2 gap-4 pt-2">
-            <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60">
-              <div class="text-emerald-400 font-bold text-xl"><i class="fa-solid fa-book-quran mr-1.5"></i> Tahfidz & Kitab</div>
-              <p class="text-xs text-slate-400 mt-1">Pembelajaran Al-Qur'an dan kitab kuning bersanad.</p>
-            </div>
-            <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60">
-              <div class="text-amber-400 font-bold text-xl"><i class="fa-solid fa-graduation-cap mr-1.5"></i> Terpadu</div>
-              <p class="text-xs text-slate-400 mt-1">Integrasi kurikulum kemendikbud & kemenag.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="lg:col-span-6">
-          <div class="rounded-2xl overflow-hidden border border-slate-700 shadow-2xl relative group">
-            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1000&q=80" alt="Kompleks Pesantren Bahrul Maghfiroh" class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-            <div class="absolute bottom-4 left-4 right-4 text-xs text-slate-300">
-              <div class="font-bold text-white text-sm">Kompleks Pondok Pesantren Bahrul Maghfiroh</div>
-              <div>Jl. Joyo Agung No. 2, Kel. Merjosari, Kec. Lowokwaru, Kota Malang, Jawa Timur</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
   <!-- ================= SECTION: IDENTITAS TIM KKN UNIVERSITAS NEGERI MALANG ================= -->
-  <section id="tim-kkn" class="py-16 lg:py-24 bg-gradient-to-b from-slate-50 to-emerald-50/40 border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section id="tim-kkn" class="py-10 lg:py-12 bg-gradient-to-b from-slate-50 to-emerald-50/40 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-wider mb-3 border border-amber-300">
-          <i class="fa-solid fa-award"></i> Tim Pengembang
+      <div class="max-w-3xl mx-auto mb-5">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-wider mb-2 border border-amber-300">
+          <i class="fa-solid fa-graduation-cap"></i> Tim Pengembang
         </div>
-        <h2 class="text-3xl sm:text-4xl font-display font-extrabold text-slate-900">
-          Mahasiswa KKN Universitas Negeri Malang (UM)
+        <h2 class="text-2xl sm:text-3xl font-display font-extrabold text-slate-900">
+          Mahasiswa KKN Reguler Universitas Negeri Malang (UM)
         </h2>
-        <p class="text-slate-600 mt-3 text-sm sm:text-base" id="tim-tema">
-          Proyek Pengabdian Masyarakat: Pengembangan Sistem Informasi Bangunan Pondok Pesantren Bahrul Maghfiroh (SIB-BM).
-        </p>
-      </div>
-
-      <!-- DPL & Informasi Pembimbing -->
-      <div class="max-w-2xl mx-auto bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-12 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
-        <div class="w-16 h-16 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-3xl font-bold shadow-md shadow-amber-500/30 flex-shrink-0">
-          <i class="fa-solid fa-user-tie"></i>
-        </div>
-        <div>
-          <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Dosen Pembimbing Lapangan (DPL)</span>
-          <h3 class="text-lg font-bold text-slate-900 mt-1" id="dpl-nama">Nama Dosen Pembimbing Lapangan, M.Pd. / M.T.</h3>
-          <p class="text-xs text-slate-500 mt-0.5">Lembaga Penelitian dan Pengabdian kepada Masyarakat (LP2M) Universitas Negeri Malang</p>
+        <div class="mt-2">
+          <span class="text-xs font-bold text-emerald-800 bg-emerald-100/80 px-3 py-1 rounded-full border border-emerald-300">
+            S1 Teknik Informatika
+          </span>
         </div>
       </div>
 
-      <!-- Kartu Anggota Tim KKN -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="anggota-tim-grid">
+      <!-- 5 Orang Mahasiswa Sejajar & Kompak (Tanpa NIM) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 max-w-5xl mx-auto" id="anggota-tim-grid">
         <!-- Disuntikkan dari data-gedung.js -->
       </div>
 
@@ -491,50 +440,69 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 pb-8 border-b border-slate-800/80">
         
-        <!-- Kolom 1: SIB-BM -->
+        <!-- Kolom 1: Profil Pondok & Yayasan -->
         <div class="space-y-3">
-          <div class="flex items-center gap-2 text-white font-display font-bold text-lg">
-            <span class="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center text-xs">
-              <i class="fa-solid fa-mosque"></i>
-            </span>
-            SIB-BM
+          <div class="flex items-center gap-3">
+            <img src="images/logo_bm.png" alt="Logo BM" class="h-10 w-auto object-contain bg-white rounded-xl p-1 shadow-md">
+            <div>
+              <span class="text-white font-display font-bold text-base block">Pondok Pesantren</span>
+              <span class="text-emerald-400 font-display font-bold text-sm tracking-wide">Bahrul Maghfiroh</span>
+            </div>
           </div>
-          <p class="text-slate-400 leading-relaxed">
-            Sistem Informasi Bangunan Pondok Pesantren Bahrul Maghfiroh. Mempermudah navigasi, survei ukuran luas tanah dan bangunan, serta inventarisasi fasilitas pondok.
+          <p class="text-slate-400 leading-relaxed text-xs">
+            Pondok Pesantren Bahrul Maghfiroh Malang merupakan Pondok Pesantren dibawah naungan Yayasan Bahrul Maghfiroh Cinta Indonesia.
           </p>
         </div>
 
-        <!-- Kolom 2: Kontak Lokasi Ponpes -->
-        <div class="space-y-2">
-          <div class="text-white font-bold text-sm mb-2">Lokasi Pesantren</div>
-          <div class="flex items-start gap-2">
-            <i class="fa-solid fa-location-dot text-emerald-500 mt-1"></i>
-            <span>Jl. Joyo Agung No. 2, Kel. Merjosari, Kec. Lowokwaru, Kota Malang, Jawa Timur 65144</span>
-          </div>
-          <div class="flex items-center gap-2 pt-1">
-            <i class="fa-solid fa-phone text-emerald-500"></i>
-            <span>Sekretariat Pesantren Bahrul Maghfiroh</span>
+        <!-- Kolom 2: Hubungi Kami -->
+        <div class="space-y-3">
+          <div class="text-white font-bold text-sm border-b border-slate-800 pb-2">Hubungi Kami</div>
+          <div class="space-y-2 text-slate-300">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-solid fa-phone text-emerald-400 w-4"></i>
+              <a href="tel:+628113648800" class="hover:text-emerald-400 transition-colors">+62 811-3648-800</a>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <i class="fa-solid fa-location-dot text-emerald-400 w-4 mt-0.5"></i>
+              <span>Jl. Joyo Agung Atas no. 02., Kota Malang, Provinsi Jawa Timur</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <i class="fa-solid fa-envelope text-emerald-400 w-4"></i>
+              <a href="mailto:yayasanbmci@gmail.com" class="hover:text-emerald-400 transition-colors">yayasanbmci@gmail.com</a>
+            </div>
           </div>
         </div>
 
-        <!-- Kolom 3: Identitas UM -->
-        <div class="space-y-2">
-          <div class="text-white font-bold text-sm mb-2">Penyusun Proyek</div>
-          <p>
-            Kelompok Kuliah Kerja Nyata (KKN)<br>
-            <strong class="text-slate-200">Universitas Negeri Malang (UM)</strong><br>
-            Karya Bakti untuk Kemaslahatan Umat dan Pesantren.
-          </p>
+        <!-- Kolom 3: Lokasi Kami (Google Maps Embed) -->
+        <div class="space-y-3">
+          <div class="text-white font-bold text-sm border-b border-slate-800 pb-2">Lokasi Kami</div>
+          <div class="rounded-xl overflow-hidden border border-slate-800 shadow-lg">
+            <iframe 
+              src="https://maps.google.com/maps?q=Pondok+Pesantren+Bahrul+Maghfiroh+Jl.+Joyo+Agung+Atas+no.+02+Kota+Malang&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+              class="w-full h-36 border-0" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Peta Lokasi Pondok Pesantren Bahrul Maghfiroh">
+            </iframe>
+          </div>
+          <a href="https://maps.google.com/?q=Pondok+Pesantren+Bahrul+Maghfiroh+Jl.+Joyo+Agung+Atas+no.+02+Kota+Malang" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-semibold text-[11px] transition-colors">
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            <span>Buka di Google Maps Langsung</span>
+          </a>
         </div>
 
       </div>
 
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 text-slate-500">
+      <!-- Copyright Bar (Ditengahkan sesuai permintaan user) -->
+      <div class="text-center text-slate-400 text-xs space-y-2">
+        <p>
+          © <span class="dinamis-tahun">2026</span> SIB-BM • Dikembangkan oleh Tim KKN Reguler Teknik Informatika 2023 Universitas Negeri Malang.
+        </p>
         <div>
-          © 2026 SIB-BM • Dikembangkan oleh Tim KKN Universitas Negeri Malang.
-        </div>
-        <div class="flex items-center gap-4">
-          <a href="#beranda" class="hover:text-emerald-400 transition-colors">Kembali ke Atas <i class="fa-solid fa-arrow-up ml-1"></i></a>
+          <a href="#beranda" class="inline-flex items-center gap-1.5 text-slate-500 hover:text-emerald-400 transition-colors">
+            <span>Kembali ke Atas</span> <i class="fa-solid fa-arrow-up text-[10px]"></i>
+          </a>
         </div>
       </div>
 
@@ -574,6 +542,15 @@
         <p id="modal-deskripsi" class="text-slate-600 text-sm leading-relaxed">
           Deskripsi lengkap fungsi dan peruntukan gedung...
         </p>
+
+        <!-- Alamat Lokasi Kawasan Ponpes -->
+        <div class="flex items-center gap-2.5 text-xs text-slate-700 bg-emerald-50/60 px-3.5 py-2.5 rounded-xl border border-emerald-200/80">
+          <i class="fa-solid fa-location-dot text-emerald-600 text-sm flex-shrink-0"></i>
+          <div>
+            <span class="text-emerald-900 font-bold block text-[10px] uppercase tracking-wider">Alamat Kawasan Ponpes Bahrul Maghfiroh:</span>
+            <span id="modal-alamat" class="font-bold text-slate-800">Jl. Joyo Agung Atas no. 02., Kota Malang, Provinsi Jawa Timur</span>
+          </div>
+        </div>
 
         <!-- Grid Spesifikasi Utama: Luas Tanah, Luas Bangunan, Kapasitas, Lantai -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
@@ -629,6 +606,34 @@
 
   </div>
 
+  <!-- ================= MODAL LIGHTBOX PERBESAR VIDEO DRONE ================= -->
+  <div id="modal-video-lightbox" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4 sm:p-8">
+    <div class="relative w-full max-w-5xl rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl flex flex-col">
+      <div class="flex items-center justify-between px-6 py-4 bg-slate-950 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-sm font-bold text-white">Video Udara Sinematik • Pondok Pesantren Bahrul Maghfiroh</span>
+        </div>
+        <button onclick="tutupVideoLightbox()" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-rose-600 text-white flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+      <div class="relative w-full aspect-video bg-black flex items-center justify-center">
+        <video id="lightbox-drone-video" controls autoplay loop class="w-full h-full object-contain">
+          <source src="videos/drone-kawasan.mp4" type="video/mp4">
+          <source src="images/drone-kawasan.mp4" type="video/mp4">
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-and-buildings-42934-large.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="px-6 py-3 bg-slate-950 text-slate-400 text-xs flex justify-between items-center">
+        <span>Tekan tombol <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono text-[11px] text-slate-300">Esc</kbd> atau klik tanda silang untuk menutup</span>
+        <button onclick="tutupVideoLightbox()" class="text-emerald-400 hover:underline font-bold text-xs">Tutup Tampilan Penuh</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEAFLET JS FOR REAL SATELLITE MAP -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- SCRIPT DATA & APP LOGIC -->
   <script src="data-gedung.js"></script>
   <script src="app.js"></script>

@@ -1,0 +1,46 @@
+# =======================================================
+# Konfigurasi Apache / Laragon untuk SIB-BM
+# Sistem Informasi Bangunan Bahrul Maghfiroh
+# KKN Reguler Universitas Negeri Malang
+# =======================================================
+
+# 1. Tentukan file index utama
+DirectoryIndex index.html index.php
+
+# 2. Aktifkan Rewrite Engine jika modul mod_rewrite aktif
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Jangan rewrite jika file atau direktori memang ada secara fisik
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Fallback ke index.html untuk Single Page Navigation
+    RewriteRule ^(.*)$ index.html [L,QSA]
+</IfModule>
+
+# 3. MIME Types untuk file video, gambar & web modern
+<IfModule mod_mime.c>
+    AddType video/mp4 .mp4
+    AddType image/webp .webp
+    AddType image/svg+xml .svg
+    AddType application/json .json
+    AddType application/javascript .js
+    AddType text/css .css
+    AddDefaultCharset UTF-8
+</IfModule>
+
+# 4. Pengaturan Header Caching & Keamanan
+<IfModule mod_headers.c>
+    # Izinkan CORS untuk tile peta & aset statis
+    Header set Access-Control-Allow-Origin "*"
+    
+    # Cache control untuk aset statis agar loading cepat di Laragon
+    <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|webp|js|css|swf|mp4)$">
+        Header set Cache-Control "max-age=604800, public"
+    </FilesMatch>
+</IfModule>
+
+# 5. Nonaktifkan penjelajahan direktori terbuka untuk keamanan
+Options -Indexes +FollowSymLinks

@@ -1,0 +1,595 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Pemilik & Pengelola SIB-BM | Ponpes Bahrul Maghfiroh</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body, h1, h2, h3, h4, .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- ================= MODAL LOGIN KHUSUS PEMILIK / ADMIN ================= -->
+  <div id="modal-login-admin" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-slate-200 p-8 space-y-6">
+      
+      <div class="text-center space-y-2">
+        <img src="{{ asset('images/logo_bm.png') }}" alt="Logo Bahrul Maghfiroh" class="w-16 h-16 object-contain mx-auto bg-white rounded-2xl p-1.5 shadow-lg border border-slate-100">
+        <h2 class="text-2xl font-display font-extrabold text-slate-900">Login Dashboard Pemilik</h2>
+        <p class="text-xs text-slate-500">Sistem Informasi Bangunan Bahrul Maghfiroh (SIB-BM)</p>
+      </div>
+
+      <form onsubmit="prosesLogin(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama Pengguna (Username):</label>
+          <div class="relative">
+            <input type="text" id="login-username" required placeholder="admin_ponpes" class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-xs">
+            <i class="fa-solid fa-user absolute left-3 top-3.5 text-slate-400"></i>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Kata Sandi (Password):</label>
+          <div class="relative">
+            <input type="password" id="login-password" required placeholder="••••••••" class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-xs">
+            <i class="fa-solid fa-key absolute left-3 top-3.5 text-slate-400"></i>
+          </div>
+        </div>
+
+        <div id="login-error" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-[11px] font-semibold text-center">
+          Username atau Password salah!
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/30 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>Masuk ke Panel Pengelola</span>
+        </button>
+
+        <div class="pt-2 text-center">
+          <a href="{{ route('beranda') }}" class="text-xs text-slate-500 hover:text-emerald-600 transition-colors">
+            <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Halaman Utama
+          </a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ================= TOPBAR DASHBOARD ================= -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Status -->
+      <div class="flex items-center gap-3">
+        <img src="{{ asset('images/logo_bm.png') }}" alt="Logo Bahrul Maghfiroh" class="w-10 h-10 object-contain bg-white rounded-xl p-1 shadow-md">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-display font-extrabold text-lg text-white">Dashboard Pemilik SIB-BM</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-400 text-slate-950 uppercase">Admin Ponpes</span>
+          </div>
+          <p class="text-xs text-slate-400">Pondok Pesantren Bahrul Maghfiroh • KKN Reguler UM</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3">
+        <a href="{{ route('beranda') }}" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm">
+          <i class="fa-solid fa-globe"></i>
+          <span>Lihat Web Depan</span>
+        </a>
+        <button onclick="logoutAdmin()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-rose-300 font-bold text-xs flex items-center gap-1.5 transition-all" title="Keluar dari sesi admin">
+          <i class="fa-solid fa-power-off"></i>
+          <span>Keluar</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Hero / Ringkasan Selamat Datang -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div>
+        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">
+          Panel Kontrol Sarana Prasarana
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-display font-extrabold text-slate-900 mt-2">
+          Kelola Video, Foto & Data Bangunan
+        </h1>
+        <p class="text-slate-600 text-xs sm:text-sm mt-1 max-w-2xl">
+          Melalui dashboard ini, pemilik dan pengurus pondok pesantren dapat mengubah video drone latar, foto gedung, luas tanah, luas bangunan, hingga kapasitas daya tampung santri secara mandiri.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <button onclick="bukaModalGedung()" class="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 flex items-center gap-2 transition-all hover:scale-105">
+          <i class="fa-solid fa-plus"></i>
+          <span>Tambah Gedung Baru</span>
+        </button>
+        <button onclick="resetDataDefault()" class="px-4 py-3 rounded-2xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 font-semibold text-xs border border-slate-200 transition-all flex items-center gap-1.5" title="Kembalikan ke data awal survei KKN">
+          <i class="fa-solid fa-rotate-left"></i>
+          <span>Reset Default</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div class="text-slate-400 text-xs font-bold uppercase flex items-center gap-2">
+          <i class="fa-solid fa-building text-emerald-600"></i> Total Bangunan
+        </div>
+        <div id="stat-total" class="text-2xl font-display font-extrabold text-slate-900 mt-2">0</div>
+        <div class="text-[11px] text-slate-500 mt-1">Gedung terdata di peta</div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div class="text-slate-400 text-xs font-bold uppercase flex items-center gap-2">
+          <i class="fa-solid fa-vector-square text-blue-600"></i> Est. Luas Tanah
+        </div>
+        <div id="stat-tanah" class="text-2xl font-display font-extrabold text-slate-900 mt-2">0 m²</div>
+        <div class="text-[11px] text-slate-500 mt-1">Akumulasi luas tanah</div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div class="text-slate-400 text-xs font-bold uppercase flex items-center gap-2">
+          <i class="fa-solid fa-layer-group text-amber-600"></i> Est. Luas Bangunan
+        </div>
+        <div id="stat-bangunan" class="text-2xl font-display font-extrabold text-slate-900 mt-2">0 m²</div>
+        <div class="text-[11px] text-slate-500 mt-1">Total luas seluruh lantai</div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div class="text-slate-400 text-xs font-bold uppercase flex items-center gap-2">
+          <i class="fa-solid fa-users text-purple-600"></i> Total Kapasitas
+        </div>
+        <div id="stat-kapasitas" class="text-2xl font-display font-extrabold text-slate-900 mt-2">0</div>
+        <div class="text-[11px] text-slate-500 mt-1">Daya tampung santri & jamaah</div>
+      </div>
+    </div>
+
+    <!-- Section 1: Pengaturan Video Drone & Media Background -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+      <div class="border-b border-slate-100 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div>
+          <h2 class="text-xl font-display font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-video text-emerald-600"></i> Pengaturan Video Drone Kawasan
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">Video ini akan diputar otomatis secara halus sebagai latar belakang peta interaktif SIB-BM.</p>
+        </div>
+        <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+          Status: Aktif
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <!-- Form Input Video & Foto -->
+        <div class="lg:col-span-7 space-y-4 text-xs">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Jalur / URL Video Drone (.mp4):</label>
+            <input type="text" id="input-drone-video" placeholder="Contoh: videos/drone-kawasan.mp4 atau URL online" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <p class="text-[11px] text-slate-500 mt-1">
+              💡 Simpan file video drone di folder <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-800">project_kkn/videos/drone-kawasan.mp4</code> atau tempel URL video MP4.
+            </p>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Jalur Foto Cadangan / Poster (.jpg):</label>
+            <input type="text" id="input-drone-foto" placeholder="Contoh: images/drone-kawasan.jpg" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+
+          <button onclick="simpanMediaDrone()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold transition-all flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk text-emerald-400"></i>
+            <span>Simpan Pengaturan Video Drone</span>
+          </button>
+        </div>
+
+        <!-- Live Preview Box -->
+        <div class="lg:col-span-5">
+          <div class="rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 relative h-48 shadow-inner flex items-center justify-center">
+            <video id="preview-video-drone" autoplay loop muted playsinline class="w-full h-full object-cover opacity-80"></video>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+            <div class="absolute bottom-2 left-3 right-3 flex justify-between items-center text-[10px] text-white">
+              <span class="font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Preview Video Drone</span>
+              <span class="text-slate-400">1080p / 60fps</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Tabel Manajemen Data Gedung -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-xl font-display font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-emerald-600"></i> Daftar Data Gedung & Bangunan
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">Kelola nama, kategori, luas tanah, luas bangunan, kapasitas, dan posisi titik pin.</p>
+        </div>
+
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <input type="text" id="admin-search" oninput="renderTabelAdmin(this.value)" placeholder="Cari nama gedung..." class="px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none w-full sm:w-64">
+        </div>
+      </div>
+
+      <!-- Tabel Responsif -->
+      <div class="overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full text-left text-xs text-slate-600">
+          <thead class="bg-slate-50 text-slate-700 uppercase font-bold border-b border-slate-200 text-[11px]">
+            <tr>
+              <th class="py-3 px-4">Foto & Kode</th>
+              <th class="py-3 px-4">Nama Gedung</th>
+              <th class="py-3 px-4">Kategori</th>
+              <th class="py-3 px-4">Luas Tanah</th>
+              <th class="py-3 px-4">Luas Bangunan</th>
+              <th class="py-3 px-4">Kapasitas</th>
+              <th class="py-3 px-4">Posisi Pin</th>
+              <th class="py-3 px-4 text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabel-admin-body" class="divide-y divide-slate-100">
+            <!-- Disuntikkan via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= MODAL FORM EDIT / TAMBAH GEDUNG ================= -->
+  <div id="modal-form-gedung" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col">
+      
+      <!-- Header Modal -->
+      <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
+        <div>
+          <h3 id="form-modal-title" class="font-display font-extrabold text-lg text-white">Tambah Gedung Baru</h3>
+          <p class="text-xs text-slate-400">Lengkapi spesifikasi ukuran dan daya tampung gedung</p>
+        </div>
+        <button onclick="tutupModalForm()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center transition-all">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Body Form -->
+      <form id="form-gedung" onsubmit="simpanDataGedung(event)" class="p-6 overflow-y-auto space-y-4 text-xs">
+        <input type="hidden" id="form-id">
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Kode Gedung:</label>
+            <input type="text" id="form-kode" required placeholder="Contoh: G-08" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Kategori:</label>
+            <select id="form-kategori" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
+              <option value="Ibadah">Ibadah</option>
+              <option value="Asrama">Asrama</option>
+              <option value="Pendidikan">Pendidikan</option>
+              <option value="Administrasi">Administrasi</option>
+              <option value="Fasilitas">Fasilitas</option>
+              <option value="Umum">Umum</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama Gedung:</label>
+          <input type="text" id="form-nama" required placeholder="Contoh: Gedung Laboratorium Bahasa" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Deskripsi & Peruntukan Gedung:</label>
+          <textarea id="form-deskripsi" rows="2" placeholder="Fungsi utama gedung ini untuk..." class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Luas Tanah (m²):</label>
+            <input type="text" id="form-luas-tanah" required placeholder="Contoh: 850 m²" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Luas Bangunan (m²):</label>
+            <input type="text" id="form-luas-bangunan" required placeholder="Contoh: 1.200 m²" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Kapasitas (Santri / Jamaah):</label>
+            <input type="text" id="form-kapasitas" required placeholder="Contoh: ± 250 Santri" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Jumlah Lantai:</label>
+            <input type="number" id="form-lantai" min="1" max="10" required value="2" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Jalur Foto Gedung (Folder images / URL):</label>
+          <input type="text" id="form-foto" required placeholder="Contoh: images/asrama-baru.jpg" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Posisi Pin Top (%):</label>
+            <input type="text" id="form-top" required placeholder="Contoh: 45%" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Posisi Pin Left (%):</label>
+            <input type="text" id="form-left" required placeholder="Contoh: 60%" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Footer Form -->
+        <div class="pt-4 border-t border-slate-200 flex justify-end gap-2">
+          <button type="button" onclick="tutupModalForm()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold">
+            Batal
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md shadow-emerald-600/20">
+            Simpan Gedung
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT DATA & LOGIKA ADMIN -->
+  <script src="{{ asset('data-gedung.js') }}"></script>
+  <script>
+    let listGedung = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      cekSesiLogin();
+      muatData();
+      muatPengaturanMedia();
+      renderStatistik();
+      renderTabelAdmin();
+    });
+
+    function cekSesiLogin() {
+      const isLogin = sessionStorage.getItem("sib_bm_admin_logged_in");
+      const modalLogin = document.getElementById("modal-login-admin");
+      if (isLogin === "true") {
+        modalLogin.classList.add("hidden");
+      } else {
+        modalLogin.classList.remove("hidden");
+      }
+    }
+
+    function prosesLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById("login-username").value.trim();
+      const p = document.getElementById("login-password").value.trim();
+      const errBox = document.getElementById("login-error");
+
+      // Kredensial Resmi Admin / Pemilik SIB-BM
+      if (u === "admin_ponpes" && p === "bahrulmaghfiroh2026") {
+        sessionStorage.setItem("sib_bm_admin_logged_in", "true");
+        errBox.classList.add("hidden");
+        document.getElementById("modal-login-admin").classList.add("hidden");
+      } else {
+        errBox.classList.remove("hidden");
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem("sib_bm_admin_logged_in");
+      window.location.reload();
+    }
+
+    function muatData() {
+      if (localStorage.getItem("sib_bm_gedung")) {
+        try {
+          listGedung = JSON.parse(localStorage.getItem("sib_bm_gedung"));
+        } catch(e) {
+          listGedung = [...DATA_GEDUNG];
+        }
+      } else if (typeof DATA_GEDUNG !== "undefined") {
+        listGedung = [...DATA_GEDUNG];
+      }
+    }
+
+    function muatPengaturanMedia() {
+      const savedVideo = localStorage.getItem("sib_bm_drone_video") || "videos/drone-kawasan.mp4";
+      const savedFoto = localStorage.getItem("sib_bm_drone_foto") || "images/drone-kawasan.jpg";
+
+      document.getElementById("input-drone-video").value = savedVideo;
+      document.getElementById("input-drone-foto").value = savedFoto;
+
+      const previewVideo = document.getElementById("preview-video-drone");
+      if (previewVideo) {
+        previewVideo.src = savedVideo;
+      }
+    }
+
+    function simpanMediaDrone() {
+      const vid = document.getElementById("input-drone-video").value.trim();
+      const foto = document.getElementById("input-drone-foto").value.trim();
+
+      if (vid) localStorage.setItem("sib_bm_drone_video", vid);
+      if (foto) localStorage.setItem("sib_bm_drone_foto", foto);
+
+      const previewVideo = document.getElementById("preview-video-drone");
+      if (previewVideo && vid) {
+        previewVideo.src = vid;
+      }
+
+      alert("Pengaturan video drone berhasil disimpan! Video akan langsung diterapkan di web depan.");
+    }
+
+    function renderStatistik() {
+      document.getElementById("stat-total").innerText = listGedung.length + " Gedung";
+
+      let totalTanah = 0;
+      let totalBangunan = 0;
+      let totalKapasitas = 0;
+
+      listGedung.forEach(g => {
+        const numTanah = parseInt(g.luas_tanah.replace(/[^0-9]/g, '')) || 0;
+        const numBangunan = parseInt(g.luas_bangunan.replace(/[^0-9]/g, '')) || 0;
+        const numKapasitas = parseInt(g.kapasitas.replace(/[^0-9]/g, '')) || 0;
+
+        totalTanah += numTanah;
+        totalBangunan += numBangunan;
+        totalKapasitas += numKapasitas;
+      });
+
+      document.getElementById("stat-tanah").innerText = totalTanah.toLocaleString('id-ID') + " m²";
+      document.getElementById("stat-bangunan").innerText = totalBangunan.toLocaleString('id-ID') + " m²";
+      document.getElementById("stat-kapasitas").innerText = "± " + totalKapasitas.toLocaleString('id-ID') + " Orang";
+    }
+
+    function renderTabelAdmin(filterKeyword = "") {
+      const tbody = document.getElementById("tabel-admin-body");
+      if (!tbody) return;
+
+      const keyword = filterKeyword.toLowerCase().trim();
+      const data = listGedung.filter(g => 
+        keyword === "" || g.nama.toLowerCase().includes(keyword) || g.kategori.toLowerCase().includes(keyword)
+      );
+
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400">Tidak ada gedung yang cocok.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = data.map((g) => `
+        <tr class="hover:bg-slate-50 transition-colors">
+          <td class="py-3 px-4 flex items-center gap-3">
+            <img src="${g.foto}" alt="${g.nama}" class="w-12 h-10 object-cover rounded-lg border border-slate-200">
+            <span class="font-mono font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">${g.kode}</span>
+          </td>
+          <td class="py-3 px-4 font-bold text-slate-900">${g.nama}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-semibold text-[11px] border border-emerald-100">${g.kategori}</span></td>
+          <td class="py-3 px-4 font-semibold text-slate-700">${g.luas_tanah}</td>
+          <td class="py-3 px-4 font-semibold text-slate-700">${g.luas_bangunan}</td>
+          <td class="py-3 px-4 text-slate-700">${g.kapasitas}</td>
+          <td class="py-3 px-4 font-mono text-[11px] text-slate-500">${g.posisi.top}, ${g.posisi.left}</td>
+          <td class="py-3 px-4 text-center">
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="editGedung('${g.id}')" class="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors" title="Edit Gedung">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button onclick="hapusGedung('${g.id}')" class="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors" title="Hapus Gedung">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function bukaModalGedung() {
+      document.getElementById("form-modal-title").innerText = "Tambah Gedung Baru";
+      document.getElementById("form-id").value = "";
+      document.getElementById("form-kode").value = "G-0" + (listGedung.length + 1);
+      document.getElementById("form-nama").value = "";
+      document.getElementById("form-deskripsi").value = "";
+      document.getElementById("form-luas-tanah").value = "";
+      document.getElementById("form-luas-bangunan").value = "";
+      document.getElementById("form-kapasitas").value = "";
+      document.getElementById("form-lantai").value = 2;
+      document.getElementById("form-foto").value = "images/gedung.jpg";
+      document.getElementById("form-top").value = "50%";
+      document.getElementById("form-left").value = "50%";
+
+      document.getElementById("modal-form-gedung").classList.remove("hidden");
+    }
+
+    function editGedung(id) {
+      const g = listGedung.find(item => item.id === id);
+      if (!g) return;
+
+      document.getElementById("form-modal-title").innerText = "Edit Rincian Gedung: " + g.nama;
+      document.getElementById("form-id").value = g.id;
+      document.getElementById("form-kode").value = g.kode;
+      document.getElementById("form-kategori").value = g.kategori;
+      document.getElementById("form-nama").value = g.nama;
+      document.getElementById("form-deskripsi").value = g.deskripsi;
+      document.getElementById("form-luas-tanah").value = g.luas_tanah;
+      document.getElementById("form-luas-bangunan").value = g.luas_bangunan;
+      document.getElementById("form-kapasitas").value = g.kapasitas;
+      document.getElementById("form-lantai").value = g.jumlah_lantai;
+      document.getElementById("form-foto").value = g.foto;
+      document.getElementById("form-top").value = g.posisi.top;
+      document.getElementById("form-left").value = g.posisi.left;
+
+      document.getElementById("modal-form-gedung").classList.remove("hidden");
+    }
+
+    function simpanDataGedung(e) {
+      e.preventDefault();
+      const id = document.getElementById("form-id").value;
+      const gExisting = id ? listGedung.find(item => item.id === id) : null;
+
+      const gedungObj = {
+        id: id || "gedung-" + Date.now(),
+        kode: document.getElementById("form-kode").value.trim(),
+        kategori: document.getElementById("form-kategori").value,
+        nama: document.getElementById("form-nama").value.trim(),
+        alamat: "Jl. Joyo Agung Atas no. 02., Kota Malang, Provinsi Jawa Timur",
+        deskripsi: document.getElementById("form-deskripsi").value.trim() || "Fasilitas gedung di kawasan Pondok Pesantren Bahrul Maghfiroh.",
+        luas_tanah: document.getElementById("form-luas-tanah").value.trim(),
+        luas_bangunan: document.getElementById("form-luas-bangunan").value.trim(),
+        jumlah_lantai: parseInt(document.getElementById("form-lantai").value) || 1,
+        kapasitas: document.getElementById("form-kapasitas").value.trim(),
+        foto: document.getElementById("form-foto").value.trim(),
+        koordinat: (gExisting && gExisting.koordinat) ? gExisting.koordinat : [-7.9387 + (Math.random() - 0.5) * 0.0008, 112.5938 + (Math.random() - 0.5) * 0.0008],
+        posisi: {
+          top: document.getElementById("form-top").value.trim(),
+          left: document.getElementById("form-left").value.trim()
+        },
+        status: "Aktif",
+        kontak_pj: "Pengurus Pondok Pesantren"
+      };
+
+      if (id) {
+        // Update
+        const idx = listGedung.findIndex(item => item.id === id);
+        if (idx !== -1) listGedung[idx] = gedungObj;
+      } else {
+        // Tambah baru
+        listGedung.push(gedungObj);
+      }
+
+      localStorage.setItem("sib_bm_gedung", JSON.stringify(listGedung));
+      tutupModalForm();
+      renderStatistik();
+      renderTabelAdmin();
+      alert("Data gedung berhasil disimpan! Perubahan sudah aktif di peta utama.");
+    }
+
+    function hapusGedung(id) {
+      if (confirm("Apakah kamu yakin ingin menghapus data gedung ini?")) {
+        listGedung = listGedung.filter(item => item.id !== id);
+        localStorage.setItem("sib_bm_gedung", JSON.stringify(listGedung));
+        renderStatistik();
+        renderTabelAdmin();
+      }
+    }
+
+    function resetDataDefault() {
+      if (confirm("Kembalikan seluruh data gedung ke data awal survei KKN?")) {
+        localStorage.removeItem("sib_bm_gedung");
+        listGedung = [...DATA_GEDUNG];
+        renderStatistik();
+        renderTabelAdmin();
+        alert("Data gedung telah direset ke versi awal.");
+      }
+    }
+
+    function tutupModalForm() {
+      document.getElementById("modal-form-gedung").classList.add("hidden");
+    }
+  </script>
+</body>
+</html>

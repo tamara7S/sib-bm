@@ -1,0 +1,30 @@
+=========================================================
+PANDUAN MENYIMPAN FOTO GEDUNG & DRONE DI FOLDER INI
+=========================================================
+
+Folder 'images' ini digunakan untuk menyimpan seluruh foto asli yang diambil oleh tim KKN UM.
+
+1. FOTO UTAMA DRONE / KAWASAN PONPES:
+   - Simpan foto tampak atas ponpes dengan nama:
+     drone-kawasan.jpg
+   - Foto ini akan menjadi latar belakang peta interaktif utama tempat pengunjung melihat seluruh kompleks.
+
+2. FOTO MASING-MASING GEDUNG:
+   Simpan foto tampak depan atau suasana gedung dengan nama sederhana (gunakan huruf kecil, tanpa spasi):
+   - masjid.jpg              (untuk Gedung Masjid)
+   - asrama-putra.jpg        (untuk Gedung Asrama Putra)
+   - asrama-putri.jpg        (untuk Gedung Asrama Putri)
+   - sekolah.jpg             (untuk Gedung Pendidikan/Madrasah)
+   - kantor-ndalem.jpg       (untuk Gedung Kantor/Rektorat/Ndalem)
+   - aula.jpg                (untuk Gedung Aula Serbaguna)
+   - klinik-kantin.jpg       (untuk Fasilitas Klinik/Kantin)
+
+3. CARA MENGHUBUNGKAN KE WEB:
+   Buka file 'data-gedung.js', lalu pada bagian 'foto', tulis jalurnya seperti ini:
+   
+   foto: "images/masjid.jpg"
+
+TIPS:
+- Gunakan format .jpg atau .png.
+- Usahakan ukuran tiap foto berkisar antara 500 KB - 2 MB agar web tetap terbuka cepat saat dibuka lewat HP atau laptop.
+=========================================================

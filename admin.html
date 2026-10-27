@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Pemilik & Pengelola SIB-BM | Ponpes Bahrul Maghfiroh</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    h1, h2, h3, h4, .font-display { font-family: 'Outfit', sans-serif; }
+    body, h1, h2, h3, h4, .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col">
@@ -19,9 +18,7 @@
     <div class="bg-white w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-slate-200 p-8 space-y-6">
       
       <div class="text-center space-y-2">
-        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-emerald-600 text-white flex items-center justify-center mx-auto text-2xl shadow-lg shadow-emerald-500/30">
-          <i class="fa-solid fa-lock"></i>
-        </div>
+        <img src="images/logo_bm.png" alt="Logo Bahrul Maghfiroh" class="w-16 h-16 object-contain mx-auto bg-white rounded-2xl p-1.5 shadow-lg border border-slate-100">
         <h2 class="text-2xl font-display font-extrabold text-slate-900">Login Dashboard Pemilik</h2>
         <p class="text-xs text-slate-500">Sistem Informasi Bangunan Bahrul Maghfiroh (SIB-BM)</p>
       </div>
@@ -59,12 +56,6 @@
         </div>
       </form>
 
-      <div class="p-3 bg-amber-50 rounded-xl border border-amber-200/80 text-[11px] text-amber-800 space-y-1">
-        <div class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-circle-info text-amber-600"></i> Kredensial Default Pemilik:</div>
-        <div>Username: <code class="font-mono font-bold text-slate-900 bg-white px-1.5 py-0.5 rounded border border-amber-200">admin_ponpes</code></div>
-        <div>Password: <code class="font-mono font-bold text-slate-900 bg-white px-1.5 py-0.5 rounded border border-amber-200">bahrulmaghfiroh2026</code></div>
-      </div>
-
     </div>
   </div>
 
@@ -74,15 +65,13 @@
       
       <!-- Brand & Status -->
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-emerald-500 flex items-center justify-center text-white shadow-md">
-          <i class="fa-solid fa-gauge-high text-lg"></i>
-        </div>
+        <img src="images/logo_bm.png" alt="Logo Bahrul Maghfiroh" class="w-10 h-10 object-contain bg-white rounded-xl p-1 shadow-md">
         <div>
           <div class="flex items-center gap-2">
             <span class="font-display font-extrabold text-lg text-white">Dashboard Pemilik SIB-BM</span>
             <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-400 text-slate-950 uppercase">Admin Ponpes</span>
           </div>
-          <p class="text-xs text-slate-400">Pondok Pesantren Bahrul Maghfiroh • KKN UM</p>
+          <p class="text-xs text-slate-400">Pondok Pesantren Bahrul Maghfiroh • KKN Reguler UM</p>
         </div>
       </div>
 
@@ -540,18 +529,21 @@
     function simpanDataGedung(e) {
       e.preventDefault();
       const id = document.getElementById("form-id").value;
+      const gExisting = id ? listGedung.find(item => item.id === id) : null;
 
       const gedungObj = {
         id: id || "gedung-" + Date.now(),
         kode: document.getElementById("form-kode").value.trim(),
         kategori: document.getElementById("form-kategori").value,
         nama: document.getElementById("form-nama").value.trim(),
+        alamat: "Jl. Joyo Agung Atas no. 02., Kota Malang, Provinsi Jawa Timur",
         deskripsi: document.getElementById("form-deskripsi").value.trim() || "Fasilitas gedung di kawasan Pondok Pesantren Bahrul Maghfiroh.",
         luas_tanah: document.getElementById("form-luas-tanah").value.trim(),
         luas_bangunan: document.getElementById("form-luas-bangunan").value.trim(),
         jumlah_lantai: parseInt(document.getElementById("form-lantai").value) || 1,
         kapasitas: document.getElementById("form-kapasitas").value.trim(),
         foto: document.getElementById("form-foto").value.trim(),
+        koordinat: (gExisting && gExisting.koordinat) ? gExisting.koordinat : [-7.9387 + (Math.random() - 0.5) * 0.0008, 112.5938 + (Math.random() - 0.5) * 0.0008],
         posisi: {
           top: document.getElementById("form-top").value.trim(),
           left: document.getElementById("form-left").value.trim()
