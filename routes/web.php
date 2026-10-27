@@ -8,3 +8,6 @@ Route::get('/', [GedungController::class, 'index'])->name('beranda');
 
 // Rute Dashboard Pemilik & Pengelola SIB-BM
 Route::get('/admin', [GedungController::class, 'admin'])->name('admin');
+
+// Endpoint API Data Gedung dari MySQL (JSON)
+Route::get('/api/gedung', [GedungController::class, 'apiGedung'])->name('api.gedung');
