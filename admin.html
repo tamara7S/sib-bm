@@ -1,56 +1,65 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Pemilik & Pengelola SIB-BM | Ponpes Bahrul Maghfiroh</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    body, h1, h2, h3, h4, .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      letter-spacing: -0.01em;
+    }
+    h1, h2, h3, h4, .font-heading {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: -0.025em;
+    }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
   <!-- ================= MODAL LOGIN KHUSUS PEMILIK / ADMIN ================= -->
-  <div id="modal-login-admin" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-slate-200 p-8 space-y-6">
+  <div id="modal-login-admin" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-200/80 p-8 space-y-6">
       
-      <div class="text-center space-y-2">
-        <img src="images/logo_bm.png" alt="Logo Bahrul Maghfiroh" class="w-16 h-16 object-contain mx-auto bg-white rounded-2xl p-1.5 shadow-lg border border-slate-100">
-        <h2 class="text-2xl font-display font-extrabold text-slate-900">Login Dashboard Pemilik</h2>
-        <p class="text-xs text-slate-500">Sistem Informasi Bangunan Bahrul Maghfiroh (SIB-BM)</p>
+      <div class="text-center space-y-2.5">
+        <img src="images/logo_bm.png" alt="Logo Bahrul Maghfiroh" class="w-16 h-16 object-contain mx-auto bg-white rounded-2xl p-1.5 shadow-md border border-slate-100">
+        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Login Dashboard Pemilik</h2>
+        <p class="text-xs text-slate-500 font-normal">Sistem Informasi Bangunan Bahrul Maghfiroh (SIB-BM)</p>
       </div>
 
       <form onsubmit="prosesLogin(event)" class="space-y-4 text-xs">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Pengguna (Username):</label>
+          <label class="block font-semibold text-slate-700 mb-1.5">Nama Pengguna (Username):</label>
           <div class="relative">
-            <input type="text" id="login-username" required placeholder="admin_ponpes" class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-xs">
-            <i class="fa-solid fa-user absolute left-3 top-3.5 text-slate-400"></i>
+            <input type="text" id="login-username" required placeholder="admin_ponpes" class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
+            <i class="fa-solid fa-user absolute left-3 top-3 text-slate-400"></i>
           </div>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Kata Sandi (Password):</label>
+          <label class="block font-semibold text-slate-700 mb-1.5">Kata Sandi (Password):</label>
           <div class="relative">
-            <input type="password" id="login-password" required placeholder="••••••••" class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-xs">
-            <i class="fa-solid fa-key absolute left-3 top-3.5 text-slate-400"></i>
+            <input type="password" id="login-password" required placeholder="••••••••" class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
+            <i class="fa-solid fa-key absolute left-3 top-3 text-slate-400"></i>
           </div>
         </div>
 
-        <div id="login-error" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-[11px] font-semibold text-center">
+        <div id="login-error" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-medium text-center">
           Username atau Password salah!
         </div>
 
-        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/30 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
-          <i class="fa-solid fa-right-to-bracket"></i>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm shadow-emerald-600/30 transition-all hover:scale-[1.01] flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket text-xs"></i>
           <span>Masuk ke Panel Pengelola</span>
         </button>
 
         <div class="pt-2 text-center">
-          <a href="index.html" class="text-xs text-slate-500 hover:text-emerald-600 transition-colors">
+          <a href="index.html" class="text-xs text-slate-500 hover:text-emerald-600 font-medium transition-colors">
             <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Halaman Utama
           </a>
         </div>
@@ -60,29 +69,29 @@
   </div>
 
   <!-- ================= TOPBAR DASHBOARD ================= -->
-  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-40 shadow-md">
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
       <!-- Brand & Status -->
       <div class="flex items-center gap-3">
-        <img src="images/logo_bm.png" alt="Logo Bahrul Maghfiroh" class="w-10 h-10 object-contain bg-white rounded-xl p-1 shadow-md">
+        <img src="images/logo_bm.png" alt="Logo Bahrul Maghfiroh" class="w-9 h-9 object-contain bg-white rounded-xl p-1 shadow-sm">
         <div>
           <div class="flex items-center gap-2">
-            <span class="font-display font-extrabold text-lg text-white">Dashboard Pemilik SIB-BM</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-400 text-slate-950 uppercase">Admin Ponpes</span>
+            <span class="font-bold text-base text-white tracking-tight">Dashboard Pemilik SIB-BM</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-400 text-slate-950 uppercase tracking-wide">Admin Ponpes</span>
           </div>
-          <p class="text-xs text-slate-400">Pondok Pesantren Bahrul Maghfiroh • KKN Reguler UM</p>
+          <p class="text-xs text-slate-400 font-normal">Pondok Pesantren Bahrul Maghfiroh • KKN Reguler UM</p>
         </div>
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm">
-          <i class="fa-solid fa-globe"></i>
+      <div class="flex items-center gap-2.5">
+        <a href="index.html" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center gap-1.5 transition-all shadow-sm">
+          <i class="fa-solid fa-globe text-xs"></i>
           <span>Lihat Web Depan</span>
         </a>
-        <button onclick="logoutAdmin()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-rose-300 font-bold text-xs flex items-center gap-1.5 transition-all" title="Keluar dari sesi admin">
-          <i class="fa-solid fa-power-off"></i>
+        <button onclick="logoutAdmin()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-900/40 text-slate-300 hover:text-rose-300 font-medium text-xs flex items-center gap-1.5 transition-all" title="Keluar dari sesi admin">
+          <i class="fa-solid fa-power-off text-xs"></i>
           <span>Keluar</span>
         </button>
       </div>
@@ -94,26 +103,26 @@
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
     <!-- Hero / Ringkasan Selamat Datang -->
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <div class="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/80 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
       <div>
-        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">
+        <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-xs font-semibold tracking-wide">
           Panel Kontrol Sarana Prasarana
         </span>
-        <h1 class="text-2xl sm:text-3xl font-display font-extrabold text-slate-900 mt-2">
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mt-2.5">
           Kelola Video, Foto & Data Bangunan
         </h1>
-        <p class="text-slate-600 text-xs sm:text-sm mt-1 max-w-2xl">
+        <p class="text-slate-600 text-xs sm:text-sm font-normal leading-relaxed mt-1.5 max-w-2xl">
           Melalui dashboard ini, pemilik dan pengurus pondok pesantren dapat mengubah video drone latar, foto gedung, luas tanah, luas bangunan, hingga kapasitas daya tampung santri secara mandiri.
         </p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-3">
-        <button onclick="bukaModalGedung()" class="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 flex items-center gap-2 transition-all hover:scale-105">
-          <i class="fa-solid fa-plus"></i>
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button onclick="bukaModalGedung()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm shadow-emerald-600/20 flex items-center gap-2 transition-all hover:scale-[1.02]">
+          <i class="fa-solid fa-plus text-xs"></i>
           <span>Tambah Gedung Baru</span>
         </button>
-        <button onclick="resetDataDefault()" class="px-4 py-3 rounded-2xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 font-semibold text-xs border border-slate-200 transition-all flex items-center gap-1.5" title="Kembalikan ke data awal survei KKN">
-          <i class="fa-solid fa-rotate-left"></i>
+        <button onclick="resetDataDefault()" class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 font-medium text-xs border border-slate-200 transition-all flex items-center gap-1.5" title="Kembalikan ke data awal survei KKN">
+          <i class="fa-solid fa-rotate-left text-xs"></i>
           <span>Reset Default</span>
         </button>
       </div>
@@ -121,49 +130,49 @@
 
     <!-- Quick Stats Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <div class="text-slate-400 text-xs font-bold uppercase flex items-center gap-2">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-sm">
+        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider flex items-center gap-2">
           <i class="fa-solid fa-building text-emerald-600"></i> Total Bangunan
         </div>
-        <div id="stat-total" class="text-2xl font-display font-extrabold text-slate-900 mt-2">0</div>
-        <div class="text-[11px] text-slate-500 mt-1">Gedung terdata di peta</div>
+        <div id="stat-total" class="text-2xl font-bold text-slate-900 tracking-tight mt-2">0</div>
+        <div class="text-xs text-slate-400 mt-1 font-normal">Gedung terdata di peta</div>
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <div class="text-slate-400 text-xs font-bold uppercase flex items-center gap-2">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-sm">
+        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider flex items-center gap-2">
           <i class="fa-solid fa-vector-square text-blue-600"></i> Est. Luas Tanah
         </div>
-        <div id="stat-tanah" class="text-2xl font-display font-extrabold text-slate-900 mt-2">0 m²</div>
-        <div class="text-[11px] text-slate-500 mt-1">Akumulasi luas tanah</div>
+        <div id="stat-tanah" class="text-2xl font-bold text-slate-900 tracking-tight mt-2">0 m²</div>
+        <div class="text-xs text-slate-400 mt-1 font-normal">Akumulasi luas tanah</div>
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <div class="text-slate-400 text-xs font-bold uppercase flex items-center gap-2">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-sm">
+        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider flex items-center gap-2">
           <i class="fa-solid fa-layer-group text-amber-600"></i> Est. Luas Bangunan
         </div>
-        <div id="stat-bangunan" class="text-2xl font-display font-extrabold text-slate-900 mt-2">0 m²</div>
-        <div class="text-[11px] text-slate-500 mt-1">Total luas seluruh lantai</div>
+        <div id="stat-bangunan" class="text-2xl font-bold text-slate-900 tracking-tight mt-2">0 m²</div>
+        <div class="text-xs text-slate-400 mt-1 font-normal">Total luas seluruh lantai</div>
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <div class="text-slate-400 text-xs font-bold uppercase flex items-center gap-2">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-sm">
+        <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider flex items-center gap-2">
           <i class="fa-solid fa-users text-purple-600"></i> Total Kapasitas
         </div>
-        <div id="stat-kapasitas" class="text-2xl font-display font-extrabold text-slate-900 mt-2">0</div>
-        <div class="text-[11px] text-slate-500 mt-1">Daya tampung santri & jamaah</div>
+        <div id="stat-kapasitas" class="text-2xl font-bold text-slate-900 tracking-tight mt-2">0</div>
+        <div class="text-xs text-slate-400 mt-1 font-normal">Daya tampung santri & jamaah</div>
       </div>
     </div>
 
     <!-- Section 1: Pengaturan Video Drone & Media Background -->
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+    <div class="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/80 shadow-sm space-y-6">
       <div class="border-b border-slate-100 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
-          <h2 class="text-xl font-display font-extrabold text-slate-900 flex items-center gap-2">
+          <h2 class="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2.5">
             <i class="fa-solid fa-video text-emerald-600"></i> Pengaturan Video Drone Kawasan
           </h2>
-          <p class="text-xs text-slate-500 mt-0.5">Video ini akan diputar otomatis secara halus sebagai latar belakang peta interaktif SIB-BM.</p>
+          <p class="text-xs text-slate-500 font-normal mt-0.5">Video ini akan diputar otomatis secara halus sebagai latar belakang peta interaktif SIB-BM.</p>
         </div>
-        <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+        <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
           Status: Aktif
         </span>
       </div>
@@ -172,19 +181,19 @@
         <!-- Form Input Video & Foto -->
         <div class="lg:col-span-7 space-y-4 text-xs">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Jalur / URL Video Drone (.mp4):</label>
-            <input type="text" id="input-drone-video" placeholder="Contoh: videos/drone-kawasan.mp4 atau URL online" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-            <p class="text-[11px] text-slate-500 mt-1">
-              💡 Simpan file video drone di folder <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-800">project_kkn/videos/drone-kawasan.mp4</code> atau tempel URL video MP4.
+            <label class="block font-semibold text-slate-700 mb-1.5">Jalur / URL Video Drone (.mp4):</label>
+            <input type="text" id="input-drone-video" placeholder="Contoh: videos/drone-kawasan.mp4 atau URL online" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
+            <p class="text-xs text-slate-500 mt-1 font-normal">
+              💡 Simpan file video drone di folder <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800 font-mono text-[11px]">project_kkn/videos/drone-kawasan.mp4</code> atau tempel URL video MP4.
             </p>
           </div>
 
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Jalur Foto Cadangan / Poster (.jpg):</label>
-            <input type="text" id="input-drone-foto" placeholder="Contoh: images/drone-kawasan.jpg" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block font-semibold text-slate-700 mb-1.5">Jalur Foto Cadangan / Poster (.jpg):</label>
+            <input type="text" id="input-drone-foto" placeholder="Contoh: images/drone-kawasan.jpg" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
           </div>
 
-          <button onclick="simpanMediaDrone()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold transition-all flex items-center gap-2">
+          <button onclick="simpanMediaDrone()" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-all flex items-center gap-2 shadow-sm">
             <i class="fa-solid fa-floppy-disk text-emerald-400"></i>
             <span>Simpan Pengaturan Video Drone</span>
           </button>
@@ -192,12 +201,12 @@
 
         <!-- Live Preview Box -->
         <div class="lg:col-span-5">
-          <div class="rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 relative h-48 shadow-inner flex items-center justify-center">
+          <div class="rounded-xl overflow-hidden bg-slate-950 border border-slate-800 relative h-48 shadow-inner flex items-center justify-center">
             <video id="preview-video-drone" autoplay loop muted playsinline class="w-full h-full object-cover opacity-80"></video>
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-            <div class="absolute bottom-2 left-3 right-3 flex justify-between items-center text-[10px] text-white">
-              <span class="font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Preview Video Drone</span>
-              <span class="text-slate-400">1080p / 60fps</span>
+            <div class="absolute bottom-2 left-3 right-3 flex justify-between items-center text-xs text-white">
+              <span class="font-semibold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Preview Video Drone</span>
+              <span class="text-slate-400 font-normal">1080p / 60fps</span>
             </div>
           </div>
         </div>
@@ -205,36 +214,39 @@
     </div>
 
     <!-- Section 2: Tabel Manajemen Data Gedung -->
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+    <div class="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/80 shadow-sm space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
         <div>
-          <h2 class="text-xl font-display font-extrabold text-slate-900 flex items-center gap-2">
+          <h2 class="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2.5">
             <i class="fa-solid fa-list-check text-emerald-600"></i> Daftar Data Gedung & Bangunan
           </h2>
-          <p class="text-xs text-slate-500 mt-0.5">Kelola nama, kategori, luas tanah, luas bangunan, kapasitas, dan posisi titik pin.</p>
+          <p class="text-xs text-slate-500 font-normal mt-0.5">Kelola nama, kategori, luas tanah, luas bangunan, kapasitas, dan posisi titik pin.</p>
         </div>
 
         <div class="flex items-center gap-2 w-full sm:w-auto">
-          <input type="text" id="admin-search" oninput="renderTabelAdmin(this.value)" placeholder="Cari nama gedung..." class="px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none w-full sm:w-64">
+          <div class="relative w-full sm:w-64">
+            <input type="text" id="admin-search" oninput="renderTabelAdmin(this.value)" placeholder="Cari nama gedung..." class="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none transition-all">
+            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+          </div>
         </div>
       </div>
 
       <!-- Tabel Responsif -->
-      <div class="overflow-x-auto rounded-2xl border border-slate-200">
+      <div class="overflow-x-auto rounded-xl border border-slate-200/80">
         <table class="w-full text-left text-xs text-slate-600">
-          <thead class="bg-slate-50 text-slate-700 uppercase font-bold border-b border-slate-200 text-[11px]">
+          <thead class="bg-slate-50/90 text-slate-600 font-semibold uppercase border-b border-slate-200 text-xs tracking-wider">
             <tr>
-              <th class="py-3 px-4">Foto & Kode</th>
-              <th class="py-3 px-4">Nama Gedung</th>
-              <th class="py-3 px-4">Kategori</th>
-              <th class="py-3 px-4">Luas Tanah</th>
-              <th class="py-3 px-4">Luas Bangunan</th>
-              <th class="py-3 px-4">Kapasitas</th>
-              <th class="py-3 px-4">Posisi Pin</th>
-              <th class="py-3 px-4 text-center">Aksi</th>
+              <th class="py-3.5 px-4 font-semibold">Foto & Kode</th>
+              <th class="py-3.5 px-4 font-semibold">Nama Gedung</th>
+              <th class="py-3.5 px-4 font-semibold">Kategori</th>
+              <th class="py-3.5 px-4 font-semibold">Luas Tanah</th>
+              <th class="py-3.5 px-4 font-semibold">Luas Bangunan</th>
+              <th class="py-3.5 px-4 font-semibold">Kapasitas</th>
+              <th class="py-3.5 px-4 font-semibold">Posisi Pin</th>
+              <th class="py-3.5 px-4 text-center font-semibold">Aksi</th>
             </tr>
           </thead>
-          <tbody id="tabel-admin-body" class="divide-y divide-slate-100">
+          <tbody id="tabel-admin-body" class="divide-y divide-slate-100 font-normal">
             <!-- Disuntikkan via JS -->
           </tbody>
         </table>
@@ -245,16 +257,16 @@
 
   <!-- ================= MODAL FORM EDIT / TAMBAH GEDUNG ================= -->
   <div id="modal-form-gedung" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col">
+    <div class="bg-white w-full max-w-xl rounded-2xl overflow-hidden shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col">
       
       <!-- Header Modal -->
       <div class="px-6 py-4 bg-slate-900 text-white flex justify-between items-center">
         <div>
-          <h3 id="form-modal-title" class="font-display font-extrabold text-lg text-white">Tambah Gedung Baru</h3>
-          <p class="text-xs text-slate-400">Lengkapi spesifikasi ukuran dan daya tampung gedung</p>
+          <h3 id="form-modal-title" class="font-bold text-base text-white tracking-tight">Tambah Gedung Baru</h3>
+          <p class="text-xs text-slate-400 font-normal">Lengkapi spesifikasi ukuran dan daya tampung gedung</p>
         </div>
         <button onclick="tutupModalForm()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center transition-all">
-          <i class="fa-solid fa-xmark"></i>
+          <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
@@ -264,12 +276,12 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Kode Gedung:</label>
-            <input type="text" id="form-kode" required placeholder="Contoh: G-08" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block font-semibold text-slate-700 mb-1.5">Kode Gedung:</label>
+            <input type="text" id="form-kode" required placeholder="Contoh: G-08" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Kategori:</label>
-            <select id="form-kategori" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white">
+            <label class="block font-semibold text-slate-700 mb-1.5">Kategori:</label>
+            <select id="form-kategori" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none bg-white text-xs text-slate-800 transition-all">
               <option value="Ibadah">Ibadah</option>
               <option value="Asrama">Asrama</option>
               <option value="Pendidikan">Pendidikan</option>
@@ -281,59 +293,59 @@
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Nama Gedung:</label>
-          <input type="text" id="form-nama" required placeholder="Contoh: Gedung Laboratorium Bahasa" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          <label class="block font-semibold text-slate-700 mb-1.5">Nama Gedung:</label>
+          <input type="text" id="form-nama" required placeholder="Contoh: Gedung Laboratorium Bahasa" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Deskripsi & Peruntukan Gedung:</label>
-          <textarea id="form-deskripsi" rows="2" placeholder="Fungsi utama gedung ini untuk..." class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+          <label class="block font-semibold text-slate-700 mb-1.5">Deskripsi & Peruntukan Gedung:</label>
+          <textarea id="form-deskripsi" rows="2" placeholder="Fungsi utama gedung ini untuk..." class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all"></textarea>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Luas Tanah (m²):</label>
-            <input type="text" id="form-luas-tanah" required placeholder="Contoh: 850 m²" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block font-semibold text-slate-700 mb-1.5">Luas Tanah (m²):</label>
+            <input type="text" id="form-luas-tanah" required placeholder="Contoh: 850 m²" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Luas Bangunan (m²):</label>
-            <input type="text" id="form-luas-bangunan" required placeholder="Contoh: 1.200 m²" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block font-semibold text-slate-700 mb-1.5">Luas Bangunan (m²):</label>
+            <input type="text" id="form-luas-bangunan" required placeholder="Contoh: 1.200 m²" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Kapasitas (Santri / Jamaah):</label>
-            <input type="text" id="form-kapasitas" required placeholder="Contoh: ± 250 Santri" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block font-semibold text-slate-700 mb-1.5">Kapasitas (Santri / Jamaah):</label>
+            <input type="text" id="form-kapasitas" required placeholder="Contoh: ± 250 Santri" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Jumlah Lantai:</label>
-            <input type="number" id="form-lantai" min="1" max="10" required value="2" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block font-semibold text-slate-700 mb-1.5">Jumlah Lantai:</label>
+            <input type="number" id="form-lantai" min="1" max="10" required value="2" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
           </div>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Jalur Foto Gedung (Folder images / URL):</label>
-          <input type="text" id="form-foto" required placeholder="Contoh: images/asrama-baru.jpg" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          <label class="block font-semibold text-slate-700 mb-1.5">Jalur Foto Gedung (Folder images / URL):</label>
+          <input type="text" id="form-foto" required placeholder="Contoh: images/asrama-baru.jpg" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
         </div>
 
         <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Posisi Pin Top (%):</label>
-            <input type="text" id="form-top" required placeholder="Contoh: 45%" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block font-semibold text-slate-700 mb-1.5">Posisi Pin Top (%):</label>
+            <input type="text" id="form-top" required placeholder="Contoh: 45%" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
           </div>
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Posisi Pin Left (%):</label>
-            <input type="text" id="form-left" required placeholder="Contoh: 60%" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <label class="block font-semibold text-slate-700 mb-1.5">Posisi Pin Left (%):</label>
+            <input type="text" id="form-left" required placeholder="Contoh: 60%" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:outline-none text-xs text-slate-800 transition-all">
           </div>
         </div>
 
         <!-- Footer Form -->
         <div class="pt-4 border-t border-slate-200 flex justify-end gap-2">
-          <button type="button" onclick="tutupModalForm()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold">
+          <button type="button" onclick="tutupModalForm()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors">
             Batal
           </button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md shadow-emerald-600/20">
+          <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm shadow-emerald-600/20 transition-all">
             Simpan Gedung
           </button>
         </div>
@@ -458,34 +470,40 @@
       );
 
       if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400">Tidak ada gedung yang cocok.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400 font-normal">Tidak ada gedung yang cocok dengan pencarian.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = data.map((g) => `
-        <tr class="hover:bg-slate-50 transition-colors">
-          <td class="py-3 px-4 flex items-center gap-3">
-            <img src="${g.foto}" alt="${g.nama}" class="w-12 h-10 object-cover rounded-lg border border-slate-200">
-            <span class="font-mono font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">${g.kode}</span>
+      tbody.innerHTML = data.map((g) => {
+        let kategoriClass = "bg-emerald-50 text-emerald-700 border-emerald-200";
+        if (g.kategori === "Asrama") kategoriClass = "bg-blue-50 text-blue-700 border-blue-200";
+        if (g.kategori === "Pendidikan") kategoriClass = "bg-amber-50 text-amber-700 border-amber-200";
+        if (g.kategori === "Administrasi") kategoriClass = "bg-indigo-50 text-indigo-700 border-indigo-200";
+
+        return `
+        <tr class="hover:bg-slate-50/80 transition-colors">
+          <td class="py-3.5 px-4 flex items-center gap-3">
+            <img src="${g.foto}" alt="${g.nama}" class="w-12 h-10 object-cover rounded-lg border border-slate-200/80 shadow-xs">
+            <span class="font-mono font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded text-[11px]">${g.kode}</span>
           </td>
-          <td class="py-3 px-4 font-bold text-slate-900">${g.nama}</td>
-          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-semibold text-[11px] border border-emerald-100">${g.kategori}</span></td>
-          <td class="py-3 px-4 font-semibold text-slate-700">${g.luas_tanah}</td>
-          <td class="py-3 px-4 font-semibold text-slate-700">${g.luas_bangunan}</td>
-          <td class="py-3 px-4 text-slate-700">${g.kapasitas}</td>
-          <td class="py-3 px-4 font-mono text-[11px] text-slate-500">${g.posisi.top}, ${g.posisi.left}</td>
-          <td class="py-3 px-4 text-center">
+          <td class="py-3.5 px-4 font-semibold text-slate-900">${g.nama}</td>
+          <td class="py-3.5 px-4"><span class="px-2.5 py-0.5 rounded-full font-medium text-xs border ${kategoriClass}">${g.kategori}</span></td>
+          <td class="py-3.5 px-4 font-medium text-slate-700">${g.luas_tanah}</td>
+          <td class="py-3.5 px-4 font-medium text-slate-700">${g.luas_bangunan}</td>
+          <td class="py-3.5 px-4 font-medium text-slate-700">${g.kapasitas}</td>
+          <td class="py-3.5 px-4 font-mono text-xs text-slate-500">${g.posisi.top}, ${g.posisi.left}</td>
+          <td class="py-3.5 px-4 text-center">
             <div class="flex items-center justify-center gap-1.5">
-              <button onclick="editGedung('${g.id}')" class="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors" title="Edit Gedung">
-                <i class="fa-solid fa-pen-to-square"></i>
+              <button onclick="editGedung('${g.id}')" class="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors" title="Edit Gedung">
+                <i class="fa-solid fa-pen-to-square text-xs"></i>
               </button>
-              <button onclick="hapusGedung('${g.id}')" class="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors" title="Hapus Gedung">
-                <i class="fa-solid fa-trash"></i>
+              <button onclick="hapusGedung('${g.id}')" class="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors" title="Hapus Gedung">
+                <i class="fa-solid fa-trash text-xs"></i>
               </button>
             </div>
           </td>
         </tr>
-      `).join("");
+      `}).join("");
     }
 
     function bukaModalGedung() {
